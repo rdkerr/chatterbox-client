@@ -7,10 +7,8 @@ var FormView = {
   },
 
   handleSubmit: function(event) {
-    // Stop the browser from submitting the form
-    event.preventDefault();
-    
-    console.log('click!');
+    Messages.setMessage($('#message')[0].value);
+    Parse.create(Messages.getMessage(), () => console.log("DONE"), () => console.log("FAIL"));
   },
 
   setStatus: function(active) {

@@ -4,15 +4,21 @@ var App = {
 
   username: 'anonymous',
 
+  room: 'anonymous',
+
   initialize: function() {
     App.username = window.location.search.substr(10);
+    Messages.setName(App.username);
+    Messages.setRoom(App.room);
 
     FormView.initialize();
     RoomsView.initialize();
     MessagesView.initialize();
+    // Friends.initialize();
 
     // Fetch initial batch of messages
     App.startSpinner();
+    App.fetch(MessagesView.render);
     App.fetch(App.stopSpinner);
 
   },
@@ -20,9 +26,9 @@ var App = {
   fetch: function(callback = ()=>{}) {
     Parse.readAll((data) => {
       // examine the response from the server request:
-      console.log(data);
+      // console.log(data);
 
-      callback();
+      callback(data.results);
     });
   },
 
