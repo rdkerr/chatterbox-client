@@ -6,10 +6,6 @@ var Friends = {
   // },
 
   toggleStatus: function(name) {
-    if (this.friendList[name]) {
-      delete this.friendList[name];
-    } else {
-      this.friendList[name] = true;
-    }
+    this.friendList[name] = true;
   }
 };

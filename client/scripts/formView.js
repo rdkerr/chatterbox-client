@@ -3,12 +3,17 @@ var FormView = {
   $form: $('form'),
 
   initialize: function() {
-    FormView.$form.on('submit', FormView.handleSubmit);
+    FormView.$form.on('submit', () => {
+      FormView.handleSubmit(this);
+      return false;
+    });
   },
 
   handleSubmit: function(event) {
-    Messages.setMessage($('#message')[0].value);
-    Parse.create(Messages.getMessage(), () => console.log("DONE"), () => console.log("FAIL"));
+    Messages.setMessage($('#message').val());
+    $('#message').val('');
+    Parse.create(Messages.getMessage(), () =>
+      MessagesView.renderMessage(Messages.message), () => console.log("FAIL"));
   },
 
   setStatus: function(active) {
