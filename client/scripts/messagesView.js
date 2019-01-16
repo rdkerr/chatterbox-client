@@ -3,53 +3,32 @@ var MessagesView = {
   $chats: $('#chats'),
 
   initialize: function() {
-    MessagesView.$chats.on('click', function(e) {
-      if (e.target.className === 'username') {
-        MessagesView.addFriend(e.target.innerHTML);
-      }
-    });
+
+    MessagesView.$chats.on('click', '.username', MessagesView.handleClick);
   },
 
-  render: function(data) {
-    data.forEach((message) => MessagesView.renderMessage(message));
+  render: function() {
+
+    MessagesView.$chats.html('');
+    Messages
+      .items()
+      .filter(message => message.username)
+      .filter(message => message.text)
+      .filter(message => Rooms.isSelected(message.roomname))
+      .each(message => MessagesView.renderMessage(message));
   },
 
   renderMessage: function(message) {
-    if (message.username && message.text && message.roomname) {
-      for (var key in message) {
-        message[key] = MessagesView.sanitize(message[key]);
-      }
-      RoomsView.createRoom(undefined, message.roomname);
-      var rendered = MessageView.render(message);
-      MessagesView.$chats.prepend(rendered);
-    }
+    var $message = MessageView.render(message);
+    MessagesView.$chats.prepend($message);
   },
 
-  addFriend: function(name) {
-    Friends.toggleStatus(name);
-    $("[id='" + name +"']").addClass('friend');
-  },
+  handleClick: function(event) {
+    // Get username from data attribute
+    var username = $(event.target).data('username');
+    if (username === undefined) { return; }
 
-  sanitize: function(message) {
-    var result = '';
-    for (var i = 0; i < message.length; i++) {
-      if (MessagesView.escape[message[i]]) {
-        result += MessagesView.escape[message[i]];
-      } else {
-        result += message[i];
-      }
-    }
-    return result;
-  },
-
-  escape: {
-    '&' : '&amp',
-    '<' : '&lt',
-    '>' : '&gt',
-    '"' : '&quot',
-    "'": '&#x27',
-    '/' : '&#x2F'
-  },
-
+    Friends.toggleStatus(username, MessagesView.render);
+  }
 
 };

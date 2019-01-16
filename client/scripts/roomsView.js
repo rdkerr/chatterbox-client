@@ -4,32 +4,38 @@ var RoomsView = {
   $select: $('#rooms select'),
 
   initialize: function() {
-    RoomsView.$button.on('click', RoomsView.createRoom);
-    RoomsView.$select.on('change', RoomsView.changeRoom);
+
+    RoomsView.$select.on('change', RoomsView.handleChange);
+    RoomsView.$button.on('click', RoomsView.handleClick);
   },
 
   render: function() {
-    Object.keys(Rooms.roomList).forEach((room) => this.renderRoom(room));
+    Rooms
+      .items()
+      .filter(room => room)
+      .filter(room => room.length < 40)
+      .each(RoomsView.renderRoom);
+    RoomsView.$select.val(Rooms.selected);
   },
 
-  renderRoom: function(room) {
-    var rendered = '<option>' + room + '</option>';
-    RoomsView.$select.append(rendered);
+  renderRoom: function(roomname) {
+    var $option = $('<option>').val(roomname).text(roomname);
+    RoomsView.$select.append($option);
   },
 
-  createRoom: function(event, roomName) {
-    roomName = roomName === undefined ? prompt('Enter a room name:') : MessagesView.sanitize(roomName);
-    if (!Rooms.roomExists(roomName)) {
-      Rooms.add(roomName);
-      RoomsView.renderRoom(roomName);
+  handleChange: function(event) {
+    Rooms.selected = RoomsView.$select.val();
+    MessagesView.render();
+  },
+
+  handleClick: function(event) {
+    var roomname = prompt('Enter room name');
+    if (roomname) {
+      Rooms.add(roomname, () => {
+        RoomsView.render();
+        MessagesView.render();
+      });
     }
-  },
-
-  changeRoom: function(event) {
-    debugger;
-    $('.chat').hide();
-    console.log(event.target.value.substr(10));
-    $('.'+ event.target.value).show();
   }
 
 };

@@ -22,20 +22,27 @@
     </script>
   </head>
   <body>
-    <div id="main">
-      <h1>chatterbox</h1>
-      <div class="spinner"><img src="client/images/spiffygif_46x46.gif"></div>
-      <div id="rooms">
-        Room:
-        <select></select>
-        <button>Add Room</button>
+    <div id="container">
+      <div id="main">
+        <h1>chatterbox</h1>
+        <div class="spinner"><img src="client/images/spiffygif_46x46.gif"></div>
+        <div id="rooms">
+          Room:
+          <select></select>
+          <button>Add Room</button>
+        </div>
+        <form action="#" id="send" method="post">
+          <textarea type="text" name="message" id="message" placeholder="Enter your message" ></textarea>
+          <br>
+          <input type="submit" name="submit" class="submit"/>
+        </form>
       </div>
-      <form action="#" id="send" method="post">
-        <input type="text" name="message" id="message"/>
-        <input type="submit" name="submit" class="submit"/>
-      </form>
+      <div id="chats"></div>
+      <div id="friend-list">
+        <h1>Friends</h1>
+        <div id="friends"></div>
+      </div>
     </div>
-    <div id="chats"></div>
     <script src="client/env/config.js"></script>
     <script src="client/scripts/parse.js"></script>
     <script src="client/scripts/rooms.js"></script>
@@ -45,6 +52,7 @@
     <script src="client/scripts/roomsView.js"></script>
     <script src="client/scripts/messageView.js"></script>
     <script src="client/scripts/messagesView.js"></script>
+    <script src="client/scripts/FriendView.js"></script>
     <script src="client/scripts/app.js"></script>
     <script>
       $(() => App.initialize());
